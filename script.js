@@ -26029,6 +26029,7 @@ function submitGuess() {
   if (activeTiles.length !== WORD_LENGTH) {
     console.log("Not long enough");
     showAlert("Not enough letters");
+    shakeTiles(activeTiles);
     return;
   }
 
