@@ -26057,26 +26057,34 @@ function flipTiles(tile, index, array, guess) {
     tile.classList.add("flip");
   }, (index * FLIP_ANIMATION_DURATION) / 2);
 
-  tile.addEventListener("transitionend", () => {
-    tile.classList.remove("flip");
-    if (targetWord[index] === letter) {
-      tile.dataset.state = "correct";
-      key.classList.add("correct");
-    } else if (targetWord.includes(letter)) {
-      tile.dataset.state = "wrong-location";
-      key.classList.add("wrong-location");
-    } else {
-      tile.dataset.state = "wrong";
-      key.classList.add("wrong");
-    }
+  tile.addEventListener(
+    "transitionend",
+    () => {
+      tile.classList.remove("flip");
+      if (targetWord[index] === letter) {
+        tile.dataset.state = "correct";
+        key.classList.add("correct");
+      } else if (targetWord.includes(letter)) {
+        tile.dataset.state = "wrong-location";
+        key.classList.add("wrong-location");
+      } else {
+        tile.dataset.state = "wrong";
+        key.classList.add("wrong");
+      }
 
-    if (index === array.length - 1) {
-      this.addEventListener("transitionend", () => {
-        startInteraction();
-        // checkWinLose(guess, array)
-      });
-    }
-  });
+      if (index === array.length - 1) {
+        this.addEventListener(
+          "transitionend",
+          () => {
+            startInteraction();
+            checkWinLose(guess, array);
+          },
+          { once: true }
+        );
+      }
+    },
+    { once: true }
+  );
 }
 function getActiveTiles() {
   return guessGrid.querySelectorAll("[data-state='active']");
@@ -26109,5 +26117,29 @@ function shakeTiles(tiles) {
       },
       { once: true }
     );
+  });
+}
+
+function checkWinLose(guess, tiles) {
+  if (guess === targetWord) {
+    showAlert("You Win", 5000);
+    danceTiles(tiles);
+    stopInteraction();
+    return;
+  }
+}
+
+function danceTiles(tiles) {
+  tiles.forEach((tile, index) => {
+    setTimeout((tile, index) => {
+      tile.classList.add("dance");
+      tile.addEventListener(
+        "animationend",
+        () => {
+          tile.classList.remove("dance");
+        },
+        { once: true }
+      );
+    }, (index * DANCE_ANIMATION_DURATION) / 5);
   });
 }
