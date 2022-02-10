@@ -26025,10 +26025,20 @@ function deleteKey() {
 }
 
 function submitGuess() {
-  const activeTiles = getActiveTiles();
+  const activeTiles = [...getActiveTiles()];
   if (activeTiles.length !== WORD_LENGTH) {
     console.log("Not long enough");
     showAlert("Not enough letters");
+    return;
+  }
+
+  const guess = activeTiles.reduce((word, tile) => {
+    return word + tile.dataset.letter;
+  }, "");
+
+  if (!dictionary.includes(guess)) {
+    showAlert("Not in dictionary list!");
+    shakeTiles(activeTiles);
     return;
   }
 }
@@ -26051,4 +26061,17 @@ function showAlert(message, duration = 1000) {
       alert.remove();
     });
   }, duration);
+}
+
+function shakeTiles(tiles) {
+  tiles.forEach((tile) => {
+    tile.classList.add("shake");
+    tile.addEventListener(
+      "animationend",
+      () => {
+        tile.classList.remove("shake");
+      },
+      { once: true }
+    );
+  });
 }
