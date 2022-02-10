@@ -12970,8 +12970,8 @@ const targetWords = [
   "rower",
   "artsy",
   "rural",
-  "shave"
-]
+  "shave",
+];
 const dictionary = [
   "aahed",
   "aalii",
@@ -25944,6 +25944,43 @@ const dictionary = [
   "rower",
   "artsy",
   "rural",
-  "shave"
-]
+  "shave",
+];
 
+function startInteraction() {
+  document.addEventListener("click", handleMouseClick);
+  document.addEventListener("keydown", handleKeyDown);
+}
+
+function stopInteraction() {
+  document.removeEventListener("click", handleMouseClick);
+  document.removeEventListener("keydown", handleKeyDown);
+}
+function handleMouseClick(event) {
+  if (event.target.matches("[data-key]")) {
+    pressKey(e.target.dataset.key);
+    return;
+  }
+
+  if (event.target.matches("[data-enter]")) {
+    submitGuess();
+    return;
+  }
+}
+
+function handleKeyDown(e) {
+  if (e.key === "Enter") {
+    submitGuess();
+    return;
+  }
+
+  if (e.key === "Backspace" || e.key === "Delete") {
+    deleteKey();
+    return;
+  }
+
+  if (e.key.match(/^[a-z]$/)) {
+    pressKey(e.key);
+    return;
+  }
+}
