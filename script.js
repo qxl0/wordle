@@ -26050,8 +26050,9 @@ function submitGuess() {
 }
 
 function flipTiles(tile, index, array, guess) {
+  console.log(tile, index, array, guess);
   const letter = tile.dataset.letter;
-  const key = keyboard.querySelector(`[data-key="${letter}]`);
+  const key = keyboard.querySelector(`[data-key='${letter}'i]`);
   setTimeout(() => {
     tile.classList.add("flip");
   }, (index * FLIP_ANIMATION_DURATION) / 2);
@@ -26061,12 +26062,19 @@ function flipTiles(tile, index, array, guess) {
     if (targetWord[index] === letter) {
       tile.dataset.state = "correct";
       key.classList.add("correct");
-    } else if (targetWord.includs(letter)) {
+    } else if (targetWord.includes(letter)) {
       tile.dataset.state = "wrong-location";
       key.classList.add("wrong-location");
     } else {
       tile.dataset.state = "wrong";
       key.classList.add("wrong");
+    }
+
+    if (index === array.length - 1) {
+      this.addEventListener("transitionend", () => {
+        startInteraction();
+        // checkWinLose(guess, array)
+      });
     }
   });
 }
