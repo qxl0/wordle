@@ -25947,18 +25947,23 @@ const dictionary = [
   "shave",
 ];
 
+const guessGrid = document.querySelector("[data-guess-grid]");
+
 function startInteraction() {
   document.addEventListener("click", handleMouseClick);
   document.addEventListener("keydown", handleKeyDown);
 }
+// call that
+startInteraction();
 
 function stopInteraction() {
   document.removeEventListener("click", handleMouseClick);
   document.removeEventListener("keydown", handleKeyDown);
 }
 function handleMouseClick(event) {
+  console.log("mouseclick", event);
   if (event.target.matches("[data-key]")) {
-    pressKey(e.target.dataset.key);
+    pressKey(event.target.dataset.key);
     return;
   }
 
@@ -25983,4 +25988,11 @@ function handleKeyDown(e) {
     pressKey(e.key);
     return;
   }
+}
+
+function pressKey(key) {
+  const nextTile = guessGrid.querySelector(":not([data-letter])");
+  nextTile.dataset.letter = key.toLowerCase();
+  nextTile.textContent = key;
+  nextTile.dataset.state = "active";
 }
