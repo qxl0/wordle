@@ -26127,11 +26127,17 @@ function checkWinLose(guess, tiles) {
     stopInteraction();
     return;
   }
+
+  const remainingTiles = guessGrid.querySelectorAll(":not([data-letter])");
+  if (remainingTiles.length === 0) {
+    showAlert(targetWord.toUpperCase(), null);
+    stopInteraction();
+  }
 }
 
 function danceTiles(tiles) {
   tiles.forEach((tile, index) => {
-    setTimeout((tile, index) => {
+    setTimeout(() => {
       tile.classList.add("dance");
       tile.addEventListener(
         "animationend",
